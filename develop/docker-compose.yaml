@@ -1,0 +1,55 @@
+version: "3.3"
+
+services:
+  hapi-php:
+    container_name: hapi-php
+    image: nasus/hyperf:8.1-alpine-3.17
+    volumes:
+      - ./../../:/app
+    ports: 
+      - 9503:9501
+    command: /bin/sh -c "echo 'hello world' > /listen.txt && tail -f /listen.txt"
+  hapi-node:
+    container_name: hapi-node
+    image: node:16
+    volumes:
+      - ./../../:/app
+    ports: 
+      - 9528:9528
+    command: /bin/bash -c "echo 'hello world' > /listen.txt && tail -f /listen.txt"
+  hapi-redis:
+    container_name: hapi-redis
+    image: redis
+    volumes:
+      - ./cache/redis:/data
+    ports:
+      - 6379:6379
+  hapi-mysql:
+    container_name: hapi-mysql
+    image: nasus/mysql-x86:5.7
+    environment:
+      MYSQL_ROOT_PASSWORD: ${mysql_root_password}
+    volumes:
+      - ./cache/mysql:/var/lib/mysql
+      - ./initdb.d:/docker-entrypoint-initdb.d
+    ports:
+      - 3306:3306
+  hapi-memcached:
+    container_name: hapi-memcached
+    image: memcached
+    ports:
+      - 11211:11211
+  hapi-rmq:
+    container_name: hapi-rmq
+    image: rabbitmq:3.11-management
+    ports:
+      - 15672:15672
+      - 5672:5672
+    environment:
+      - RABBITMQ_DEFAULT_USER=root
+      - RABBITMQ_DEFAULT_PASS=root
+
+networks:
+  default:
+    external:
+      name: basic_host
