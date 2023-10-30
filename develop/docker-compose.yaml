@@ -3,7 +3,7 @@ version: "3.3"
 services:
   hapi-develop-php:
     container_name: hapi-develop-php
-    image: nasus/hapi:8.1-alpine-3.17
+    image: nasus/hyperf:80
     volumes:
       - ./../../:/app
     ports: 
@@ -37,7 +37,10 @@ services:
       - 3306:3306
   hapi-develop-memcached:
     container_name: hapi-develop-memcached
-    image: memcached
+    image: nasus/memcached
+    environment:
+      USERNAME: hapi
+      PASSWORD: 123456
     ports:
       - 11211:11211
   hapi-develop-rmq:
