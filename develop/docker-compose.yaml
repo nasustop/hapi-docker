@@ -3,7 +3,7 @@ version: "3.3"
 services:
   hapi-develop-php:
     container_name: hapi-develop-php
-    image: nasus/hyperf:80
+    image: nasus/hapi:80
     volumes:
       - ./../../:/app
     ports: 
@@ -60,6 +60,20 @@ services:
       MONGO_INITDB_ROOT_PASSWORD: 123456
     ports:
       - 27017:27017
+  hapi-develop-elasticsearch:
+    container_name: hapi-develop-elasticsearch
+    image: elasticsearch:7.17.17
+    environment:
+      - discovery.type=single-node
+    ports:
+      - 9200:9200
+  hapi-develop-kibana:
+    container_name: hapi-develop-kibana
+    image: kibana:7.17.17
+    environment:
+      ELASTICSEARCH_HOSTS: '["http://hapi-develop-elasticsearch:9200"]'
+    ports:
+      - 5601:5601
 
 networks:
   default:
