@@ -1,23 +1,23 @@
 version: "3.3"
 
 services:
-  hapi-develop-php:
+  hapi-php:
     container_name: hapi-php
     image: nasus/hapi:80
     volumes:
       - ./../../hshop:/app
     ports: 
       - 9503:9501
-    command: /bin/sh -c "php /app/bin/hyperf.php start"
-  hapi-develop-redis:
+    command: /bin/sh -c "cd /app && composer install && php /app/bin/hyperf.php start"
+  hapi-redis:
     container_name: hapi-redis
     image: redis
     volumes:
       - ./cache/redis:/data
     ports:
       - 16379:6379
-  hapi-develop-mysql:
-    container_name: hapi-develop-mysql
+  hapi-mysql:
+    container_name: hapi-mysql
     image: mysql:5.7
     environment:
       MYSQL_ROOT_PASSWORD: ${mysql_root_password}
